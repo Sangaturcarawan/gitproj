@@ -55,33 +55,74 @@ class Book:
         self.available_copies = available_copies
 
     def __str__(self):
-        return (f"{self.name} is written by {self.author}\n" 
-                f"and there are {self.available_copies} copies available")
+        return f"{self.title} by {self.author} - {self.available_copies} copies left"
     
     def borrow(self):
-        if self.available_copies > 1:
+        if self.available_copies > 0: 
             self.available_copies -= 1
-            print("{self.title} borrowed successfully")
+            print(f"{self.title} by {self.author} borrowed")
         else:
-            print("No copies of {self.title} available")
+            print("No more copies left")
 
     def return_book(self):
         self.available_copies += 1
-        print(f"{self.title} returned")
+        print(f"{self.title} by {self.author} returned")
 
-class library:
+class Library:
     def __init__(self):
         self.books = []
-    
-    def add_books(self, book):
+
+    def add_books(self,book):
         self.books.append(book)
-        print(f"")
+        print(f"{book.title} added")
 
     def show_books(self):
-        print(self.books)
+        if not self.books:
+            print("No books in the library")
+        else:
+            print("Available Books:")
+            for book in self.books:
+                print(book)
+            print("-" * 40)
 
     def borrow_book(self, title):
-        numBook = 0
-        for b in self.books:
-            numBook += 1
+        for book in self.books:
+            if book.title.lower() == title.lower():
+                book.borrow()
+                return
+            
+        print(f"{title} not found in the library")
+
+    def return_book(self,title):
+        for book in self.books:
+            if book.title.lower() == title.lower():
+                book.return_book()
+                return
         
+        print(f"{title} is not in the library")
+
+
+library = Library()
+library.show_books()
+
+book1 = Book("Sejarah Melayu (Malay Annals)", "Tun Seri Lanang", 3)
+book2 = Book("Bustan al-Salatin", "Nuruddin al-Raniri", 4)
+book3 = Book("Hidayat al-Salikin", "Abd al-Samad al-Palimbani", 2)
+
+library.add_books(book1)
+library.add_books(book2)
+library.add_books(book3)
+
+library.show_books()
+
+library.borrow_book("Hidayat al-Salikin")
+library.borrow_book("Hidayat al-Salikin")
+library.borrow_book("Hidayat al-Salikin")
+
+library.show_books()
+
+library.return_book("Hidayat al-Salikin")
+library.return_book("Hidayat al-Salikin")
+library.return_book("Hidayat al-Salikin")
+
+library.show_books()
